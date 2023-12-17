@@ -1,1 +1,1 @@
-This is a Collge Wesbite for GIC Purbaliyan.
+This is a College Wesbite for GIC Purbaliyan.
