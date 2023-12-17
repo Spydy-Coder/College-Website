@@ -8,6 +8,8 @@ import About from "./pages/About";
 import Admission from "./pages/Admission";
 import Login from "./pages/Login";
 import { AuthProvider } from './AuthContext';
+import StudentIdentity from "./pages/forms/StudentIdentity";
+import StudentRegistration from "./pages/forms/StudentRegistration";
 function App() {
   return (
     <Router>
@@ -16,6 +18,8 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/login" exact component={Login} />
           <Route path="/admission" exact component={Admission} />
+          <Route path="/studentidentity" exact component={StudentIdentity} />
+          <Route path="/studentregistration" exact component={StudentRegistration} />
         </Switch>
       </div>
     </Router>

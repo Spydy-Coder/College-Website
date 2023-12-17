@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function ApplicationFlow() {
   return (
@@ -22,45 +23,45 @@ export default function ApplicationFlow() {
             style={{ border: "1px solid transparent" }}
           >
             <b>Step 1:</b>{" "}
-            <a href="#" style={{ textDecoration: "none" }}>
+            <Link to="/studentidentity" style={{ textDecoration: "none" }}>
               Identity Info
-            </a>
+            </Link>
           </li>
           <li
             className="list-group-item"
             style={{ border: "1px solid transparent" }}
           >
             <b>Step 2:</b>{" "}
-            <a href="#" style={{ textDecoration: "none" }}>
+            <Link to="/studentregistration" style={{ textDecoration: "none" }}>
               Enrollment Related Info
-            </a>
+            </Link>
           </li>
           <li
             className="list-group-item"
             style={{ border: "1px solid transparent" }}
           >
             <b>Step 3:</b>{" "}
-            <a href="#" style={{ textDecoration: "none" }}>
+            <Link to="/" style={{ textDecoration: "none" }}>
               Previous School Info
-            </a>
+            </Link>
           </li>
           <li
             className="list-group-item"
             style={{ border: "1px solid transparent" }}
           >
             <b>Step 4:</b>{" "}
-            <a href="#" style={{ textDecoration: "none" }}>
+            <Link to="/" style={{ textDecoration: "none" }}>
               Upload Documents
-            </a>
+            </Link>
           </li>
           <li
             className="list-group-item"
             style={{ border: "1px solid transparent" }}
           >
             <b>Step 5:</b>{" "}
-            <a href="#" style={{ textDecoration: "none" }}>
+            <Link to="/" style={{ textDecoration: "none" }}>
               Submit Application
-            </a>
+            </Link>
           </li>
         </ul>
       </div>
