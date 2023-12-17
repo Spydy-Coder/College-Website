@@ -27,7 +27,7 @@ function Navbar(props) {
                 </a>
               </li>
               <li class="nav-item ms-4">
-                <a class="nav-link" href="/admission">
+                <a class="nav-link" href="/login">
                   Admission
                 </a>
               </li>
@@ -91,7 +91,5 @@ function Navbar(props) {
     </div>
   );
 }
-
-
 
 export default Navbar;
