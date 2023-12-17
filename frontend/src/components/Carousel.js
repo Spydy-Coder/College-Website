@@ -34,14 +34,16 @@ export default function Carousel() {
         <div className="carousel-inner">
           <div className="carousel-item active">
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Pataskala_Elementary_School.jpg"
+              src="/pic1.jpeg"
               className="d-block w-100"
               alt="..."
-              style={{ maxHeight: "300px", objectFit: "cover" }}
+              style={{ maxHeight: "400px", objectFit: "cover" }}
             />
             <div className="carousel-caption d-none d-md-block">
               <h5>First slide label</h5>
-              <p>Some representative placeholder content for the first slide.</p>
+              <p>
+                Some representative placeholder content for the first slide.
+              </p>
             </div>
           </div>
           <div className="carousel-item">
@@ -49,23 +51,27 @@ export default function Carousel() {
               src="https://jooinn.com/images/primary-school-classroom-5.jpg"
               className="d-block w-100"
               alt="..."
-              style={{ maxHeight: "300px", objectFit: "cover" }}
+              style={{ maxHeight: "400px", objectFit: "cover" }}
             />
             <div className="carousel-caption d-none d-md-block">
               <h5>Second slide label</h5>
-              <p>Some representative placeholder content for the second slide.</p>
+              <p>
+                Some representative placeholder content for the second slide.
+              </p>
             </div>
           </div>
           <div className="carousel-item">
             <img
-              src="https://th.bing.com/th/id/R.fe37f790da5d0c9b1724cbdccbf9e0b7?rik=vIVMU%2be%2bf1fB0Q&riu=http%3a%2f%2fwww.aaascholarships.org%2fwp-content%2fuploads%2f2015%2f12%2fStudents-in-classroom.jpg&ehk=eCij%2b%2bBOsmz8czBO74F1E6nuDL9ZGTqW4UcOtzBY2wI%3d&risl=&pid=ImgRaw&r=0"
+              src="https://upload.wikimedia.org/wikipedia/commons/5/51/Pataskala_Elementary_School.jpg"
               className="d-block w-100"
               alt="..."
-              style={{ maxHeight: "300px", objectFit: "cover" }}
+              style={{ maxHeight: "400px", objectFit: "cover" }}
             />
             <div className="carousel-caption d-none d-md-block">
               <h5>Third slide label</h5>
-              <p>Some representative placeholder content for the third slide.</p>
+              <p>
+                Some representative placeholder content for the third slide.
+              </p>
             </div>
           </div>
         </div>
@@ -75,7 +81,10 @@ export default function Carousel() {
           data-bs-target="#carouselExampleCaptions"
           data-bs-slide="prev"
         >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span
+            className="carousel-control-prev-icon"
+            aria-hidden="true"
+          ></span>
           <span className="visually-hidden">Previous</span>
         </button>
         <button
@@ -84,7 +93,10 @@ export default function Carousel() {
           data-bs-target="#carouselExampleCaptions"
           data-bs-slide="next"
         >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span
+            className="carousel-control-next-icon"
+            aria-hidden="true"
+          ></span>
           <span className="visually-hidden">Next</span>
         </button>
       </div>

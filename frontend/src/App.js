@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Admission from "./pages/Admission";
 import Login from "./pages/Login";
-
+import { AuthProvider } from './AuthContext';
 function App() {
   return (
     <Router>

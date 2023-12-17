@@ -9,8 +9,10 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { toast, Toaster } from "react-hot-toast";
 import { IoCall } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 
 const Login = () => {
+  const { phoneNumber, setAuthData } = useAuth();
   const history = useHistory();
   const [otp, setOtp] = useState("");
   const [ph, setPh] = useState("");
@@ -39,14 +41,15 @@ const Login = () => {
     onCaptchVerify();
 
     const appVerifier = window.recaptchaVerifier;
-    const formatPh = "+" + ph;
+    const formatPh = '+' + ph;
 
     signInWithPhoneNumber(auth, formatPh, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         setLoading(false);
         setShowOTP(true);
-        toast.success("OTP sent successfully!");
+        setAuthData(formatPh); // Store phone number in the context
+        toast.success('OTP sent successfully!');
       })
       .catch((error) => {
         console.log(error);
