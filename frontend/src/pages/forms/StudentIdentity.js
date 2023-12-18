@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar";
 import { useAuth } from "../../AuthContext";
 import { AuthProvider } from "../../AuthContext";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useState } from "react";
 
 export default function StudentIdentity() {
   const { phoneNumber } = useAuth();
@@ -10,6 +11,60 @@ export default function StudentIdentity() {
 
   const redirectToHome = () => {
     history.push("/");
+  };
+
+  const redirectToAdmission = ()=>{
+    history.push('/admission')
+  }
+
+  const [formData, setFormData] = useState({
+    EmailId: "",
+    AlternateMobileNumber: "",
+    MobileNumber: "",
+    Pincode: "",
+    PresentAddress: "",
+    StudentAsPerAadhar: "",
+    AadharNoFather: "",
+    AadharNoMother: "",
+    GuardianName: "",
+    FatherName: "",
+    MotherName: "",
+    Gender: "",
+    DOBAsPerAadhar: "",
+    DOBAsPerTC: "",
+    AadharNo: "",
+    NameAsPerAadhar: "",
+    NameAsPerTC: "",
+  });
+
+  const handleInputChange = (e) => {
+    console.log("change", e);
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+
+    try {
+      const response = await fetch("http://localhost:8800/studentidentity", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      console.log(result);
+
+      redirectToAdmission()
+
+      // Handle success or error accordingly
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -23,7 +78,7 @@ export default function StudentIdentity() {
               <h2 class="h4">Student Information (As per TC)</h2>
             </div>
             <div className="flex-item">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="form-row">
                   <div className="form-group  col-auto mb-3">
                     <label htmlFor="NameAsPerTC">
@@ -34,6 +89,7 @@ export default function StudentIdentity() {
                       className="form-control form-control-sm"
                       id="NameAsPerTC"
                       placeholder=""
+                      onChange={handleInputChange}
                     />
                   </div>
                   <div className="form-group col-auto col-auto mb-3">
@@ -45,6 +101,7 @@ export default function StudentIdentity() {
                       className="form-control form-control-sm"
                       id="NameAsPerAadhar"
                       placeholder=""
+                      onChange={handleInputChange}
                     />
                   </div>
                 </div>
@@ -55,6 +112,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="AadharNo"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -64,6 +122,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="DOBAsPerTC"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -75,12 +134,17 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="DOBAsPerAadhar"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
                   <label htmlFor="Gender">Gender:</label>
                   <div className="col-sm-8">
-                    <select className="form-select" id="Gender">
+                    <select
+                      className="form-select"
+                      id="Gender"
+                      onChange={handleInputChange}
+                    >
                       <option defaultValue>Select your gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
@@ -90,12 +154,13 @@ export default function StudentIdentity() {
                   </div>
                 </div>
                 <div className="form-group col-auto mb-3">
-                  <label htmlFor="DOBAsPerTC">MOTHER NAME:</label>
+                  <label htmlFor="MotherName">MOTHER NAME:</label>
                   <input
                     type="text"
                     className="form-control form-control-sm"
                     id="MotherName"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -105,6 +170,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="FatherName"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -116,6 +182,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="GuardianName"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -125,6 +192,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="AadharNoMother"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -132,8 +200,9 @@ export default function StudentIdentity() {
                   <input
                     type="number"
                     className="form-control form-control-sm"
-                    id="AadharNoFatherC"
+                    id="AadharNoFather"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -145,6 +214,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="StudentAsPerAadhar"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -154,6 +224,7 @@ export default function StudentIdentity() {
                     id="PresentAddress"
                     rows="3"
                     placeholder=""
+                    onChange={handleInputChange}
                   ></textarea>
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -163,6 +234,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="Pincode"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -174,6 +246,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="MobileNumber"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -185,6 +258,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="AlternateMobileNumber"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -196,6 +270,7 @@ export default function StudentIdentity() {
                     className="form-control form-control-sm"
                     id="EmailId"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <button type="submit" className="btn btn-primary mt-3">

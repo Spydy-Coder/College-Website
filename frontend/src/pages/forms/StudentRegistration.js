@@ -3,13 +3,64 @@ import Navbar from "../../components/Navbar";
 import { useAuth } from "../../AuthContext";
 import { AuthProvider } from "../../AuthContext";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-
+import { useState } from "react";
 export default function StudentRegistration() {
   const { phoneNumber } = useAuth();
   const history = useHistory();
 
   const redirectToHome = () => {
     history.push("/");
+  };
+  const redirectToAdmission = ()=>{
+    history.push('/admission')
+  }
+
+  const [formData, setFormData] = useState({
+    MotherTongue: "",
+    SocialCategory: "",
+    MinorityGroup: "",
+    BPLBeneficiary: "",
+    AAYBeneficiary: "",
+    EWSDisadvantageGroup: "",
+    IsCWSN: "",
+    CWSNImpairmentType: "",
+    ChildIsIndianNational: "",
+    ChildIsOutOfSchoolChild: "",
+    MainstreamedDate: "",
+    // Add other form fields as needed
+  });
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({
+      ...formData,
+      [id]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    // Perform validation if needed
+
+    // Send the form data to your backend
+    fetch("http://localhost:8800/studentregistration", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Add any other headers as needed
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the backend
+        console.log("Form submitted successfully", data);
+        redirectToAdmission()
+      })
+      .catch((error) => {
+        console.error("Error submitting form", error);
+      });
   };
 
   return (
@@ -23,7 +74,7 @@ export default function StudentRegistration() {
               <h2 className="h4">Student Registration</h2>
             </div>
             <div className="flex-item">
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="form-group col-auto mb-3">
                   <label htmlFor="MotherTongue">MOTHER TONGUE:</label>
                   <input
@@ -31,11 +82,16 @@ export default function StudentRegistration() {
                     className="form-control form-control-sm"
                     id="MotherTongue"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
                   <label htmlFor="SocialCategory">SOCIAL CATEGORY:</label>
-                  <select className="form-select" id="SocialCategory">
+                  <select
+                    className="form-select"
+                    id="SocialCategory"
+                    onChange={handleInputChange}
+                  >
                     <option defaultValue>Select category</option>
                     <option value="sc">1.SC</option>
                     <option value="st">2.ST</option>
@@ -46,7 +102,11 @@ export default function StudentRegistration() {
                 </div>
                 <div className="form-group col-auto mb-3">
                   <label htmlFor="MinorityGroup">MINORITY GROUP:</label>
-                  <select className="form-select" id="MinorityGroup">
+                  <select
+                    className="form-select"
+                    id="MinorityGroup"
+                    onChange={handleInputChange}
+                  >
                     <option defaultValue>Select minority group</option>
                     <option value="muslim">Muslim</option>
                     <option value="christian">Christian</option>
@@ -60,17 +120,25 @@ export default function StudentRegistration() {
                 </div>
                 <div className="form-group col-auto mb-3">
                   <label htmlFor="BPLBeneficiary">Is BPL BENEFAICIARY?</label>
-                  <select className="form-select" id="BPLBeneficiary">
+                  <select
+                    className="form-select"
+                    id="BPLBeneficiary"
+                    onChange={handleInputChange}
+                  >
                     <option defaultValue>Select option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                   </select>
                 </div>
                 <div className="form-group col-auto mb-3">
-                  <label htmlFor="BPLBeneficiary">
+                  <label htmlFor="AAYBeneficiary">
                     Whether Antyodaya Anna Yojana (AAY) beneficiary?:
                   </label>
-                  <select className="form-select" id="BPLBeneficiary">
+                  <select
+                    className="form-select"
+                    id="AAYBeneficiary"
+                    onChange={handleInputChange}
+                  >
                     <option defaultValue>Select option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
@@ -80,7 +148,11 @@ export default function StudentRegistration() {
                   <label htmlFor="EWSDisadvantageGroup">
                     BELONGS TO EWS/DISADVANTAGED GROUP?
                   </label>
-                  <select className="form-select" id="EWSDisadvantageGroup">
+                  <select
+                    className="form-select"
+                    id="EWSDisadvantageGroup"
+                    onChange={handleInputChange}
+                  >
                     <option defaultValue>Select option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
@@ -88,7 +160,11 @@ export default function StudentRegistration() {
                 </div>
                 <div className="form-group col-auto mb-3">
                   <label htmlFor="IsCWSN">IS CWSN?</label>
-                  <select className="form-select" id="IsCWSN">
+                  <select
+                    className="form-select"
+                    id="IsCWSN"
+                    onChange={handleInputChange}
+                  >
                     <option defaultValue>Select option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
@@ -103,13 +179,18 @@ export default function StudentRegistration() {
                     className="form-control form-control-sm"
                     id="CWSNImpairmentType"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
                   <label htmlFor="ChildIsIndianNational">
                     CHILD IS INDIAN NATIONAL?
                   </label>
-                  <select className="form-select" id="ChildIsIndianNational">
+                  <select
+                    className="form-select"
+                    id="ChildIsIndianNational"
+                    onChange={handleInputChange}
+                  >
                     <option defaultValue>Select option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
@@ -119,7 +200,11 @@ export default function StudentRegistration() {
                   <label htmlFor="ChildIsOutOfSchoolChild">
                     CHILD IS OUT-OF-SCHOOL-CHILD?{" "}
                   </label>
-                  <select className="form-select" id="ChildIsOutOfSchoolChild">
+                  <select
+                    className="form-select"
+                    id="ChildIsOutOfSchoolChild"
+                    onChange={handleInputChange}
+                  >
                     <option defaultValue>Select option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
@@ -134,6 +219,7 @@ export default function StudentRegistration() {
                     className="form-control form-control-sm"
                     id="MainstreamedDate"
                     placeholder=""
+                    onChange={handleInputChange}
                   />
                 </div>
                 {/* Add similar form groups for other details */}
