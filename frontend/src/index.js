@@ -5,12 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './css/fonts.css';
 import { AuthProvider } from './AuthContext';
+import StudentProvider from './StudentProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthProvider>
+      <StudentProvider>
     <App />
+    </StudentProvider>
     </AuthProvider>
   </React.StrictMode>
 );

@@ -4,8 +4,12 @@ import { useAuth } from "../../AuthContext";
 import { AuthProvider } from "../../AuthContext";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useState } from "react";
+import StudentContext from '../../StudentContext';
+import { useContext } from "react";
 
 export default function StudentIdentity() {
+
+  const { updateStudentId } = useContext(StudentContext);
   const { phoneNumber } = useAuth();
   const history = useHistory();
 
@@ -63,7 +67,9 @@ export default function StudentIdentity() {
       });
 
       const result = await response.json();
-      console.log(result);
+      console.log("responsesee:",result.studentId);
+      const newStudentId = result.studentId;
+      updateStudentId(newStudentId);
 
       redirectToAdmission();
 

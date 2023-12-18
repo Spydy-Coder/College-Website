@@ -4,7 +4,10 @@ import { useAuth } from "../../AuthContext";
 import { AuthProvider } from "../../AuthContext";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { useState } from "react";
+import { useContext } from "react";
+import StudentContext from "../../StudentContext";
 export default function StudentRegistration() {
+  const { studentId } = useContext(StudentContext);
   const { phoneNumber } = useAuth();
   const history = useHistory();
 
@@ -31,6 +34,7 @@ export default function StudentRegistration() {
   });
 
   const handleInputChange = (e) => {
+    console.log(studentId)
     const { id, value, type } = e.target;
 
   if (type === 'date') {
@@ -48,7 +52,7 @@ export default function StudentRegistration() {
     // Perform validation if needed
 
     // Send the form data to your backend
-    fetch("http://localhost:8800/studentregistration", {
+    fetch(`http://localhost:8800/studentregistration/${studentId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
