@@ -31,11 +31,15 @@ export default function StudentRegistration() {
   });
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({
-      ...formData,
-      [id]: value,
-    });
+    const { id, value, type } = e.target;
+
+  if (type === 'date') {
+    // Format the date to "yyyy-mm-dd"
+    const formattedDate = new Date(value).toISOString().split('T')[0];
+    setFormData({ ...formData, [id]: formattedDate });
+  } else {
+    setFormData({ ...formData, [id]: value });
+  };
   };
 
   const handleSubmit = (e) => {
@@ -76,13 +80,14 @@ export default function StudentRegistration() {
             <div className="flex-item">
               <form onSubmit={handleSubmit}>
                 <div className="form-group col-auto mb-3">
-                  <label htmlFor="MotherTongue">MOTHER TONGUE:</label>
+                  <label htmlFor="MotherTongue">MOTHER TONGUE:<span className="text-danger ms-2 fs-5 mb-0 mb-0">*</span></label>
                   <input
                     type="text"
                     className="form-control form-control-sm"
                     id="MotherTongue"
                     placeholder=""
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
                 <div className="form-group col-auto mb-3">
@@ -101,11 +106,12 @@ export default function StudentRegistration() {
                   </select>
                 </div>
                 <div className="form-group col-auto mb-3">
-                  <label htmlFor="MinorityGroup">MINORITY GROUP:</label>
+                  <label htmlFor="MinorityGroup">MINORITY GROUP:<span className="text-danger ms-2 fs-5 mb-0 mb-0">*</span></label>
                   <select
                     className="form-select"
                     id="MinorityGroup"
                     onChange={handleInputChange}
+                    required
                   >
                     <option defaultValue>Select minority group</option>
                     <option value="muslim">Muslim</option>
