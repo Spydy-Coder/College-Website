@@ -178,7 +178,7 @@ const Login = () => {
                     country={"in"}
                     value={ph}
                     onChange={setPh}
-                    inputClass="form-control"
+                    inputclassName="form-control"
                   />
                   <button
                     onClick={onSignup}
