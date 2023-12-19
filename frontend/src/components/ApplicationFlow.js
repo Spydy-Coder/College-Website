@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { TiTick } from "react-icons/ti";
+import { useEffect } from "react";
 
 export default function ApplicationFlow() {
   return (
@@ -25,9 +26,9 @@ export default function ApplicationFlow() {
           >
             <b>Step 1:</b>{" "}
             <Link to="/studentidentity" style={{ textDecoration: "none" }}>
-              Identity Info 
-            </Link> <TiTick className="mb-1" size={20} style={{ color: 'green' }} />
-
+              Identity Info
+            </Link>{" "}
+            <TiTick className="mb-1" size={20} style={{ color: "green" }} />
           </li>
           <li
             className="list-group-item"

@@ -21,12 +21,43 @@ app.get("/", (req, res) => {
 })
 
 
-app.post('/studentidentity', (req, res) => {
-  console.log(req)
-  const q =
-    'INSERT INTO studentidentity (NameAsPerTC, NameAsPerAadhar, AadharNo, DOBAsPerTC, DOBAsPerAadhar, Gender, MotherName, FatherName, GuardianName, AadharNoMother, AadharNoFather, StudentNameAsPerAadhar, PresentAddress, Pincode, MobileNumber, AlternateMobileNumber, EmailId) VALUES (?)'
+app.post("/authprogress", (req, res) => {
+  try {
+    // Extract phoneNumber from the request body
     
+    const { phoneNumber } = req.body;
+
+    // Validate if phoneNumber is present
+    if (!phoneNumber) {
+      return res.status(400).json({ error: "phoneNumber is required" });
+    }
+
+    // Your database query
+    const q = 'INSERT INTO authprogress (MobileNumber) VALUES (?)';
+    const values = [phoneNumber];
+
+    db.query(q, [values], (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      return res.json({ message: "New student enrolled!", studentId: data.insertId });
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+
+app.post('/studentidentity/:id', (req, res) => {
+  const StudentId= req.params.id;
+  const q =
+    'INSERT INTO studentidentity (StudentId, NameAsPerTC, NameAsPerAadhar, AadharNo, DOBAsPerTC, DOBAsPerAadhar, Gender, MotherName, FatherName, GuardianName, AadharNoMother, AadharNoFather, StudentNameAsPerAadhar, PresentAddress, Pincode, MobileNumber, AlternateMobileNumber, EmailId) VALUES (?)'
   const values = [
+    StudentId,
     req.body.NameAsPerTC,
     req.body.NameAsPerAadhar,
     req.body.AadharNo,
@@ -48,7 +79,7 @@ app.post('/studentidentity', (req, res) => {
 
   db.query(q, [values], (err, data) => {
         if(err) return res.json(err)
-        return  res.json({ message: "New student enrolled!", studentId: data.insertId});
+        return  res.json({ message: "New student Identity Information added !"});
   });
 });
 
@@ -56,9 +87,10 @@ app.post('/studentidentity', (req, res) => {
 app.post('/studentregistration/:id', (req, res) => {
   const StudentId= req.params.id;
   const q =
-    'INSERT INTO student_apf_2 (StudentId, MotherTongue, SocialCategory, MinorityGroup, BPLBeneficiary, AAYBeneficiary, EWSDisadvantagedGroup, IsCWSN, CWSNImpairmentType, ChildIsIndianNational, ChildIsOutOfSchoolChild, MainstreamedDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    'INSERT INTO studentregistration (StudentId, MotherTongue, SocialCategory, MinorityGroup, BPLBeneficiary, AAYBeneficiary, EWSDisadvantagedGroup, IsCWSN, CWSNImpairmentType, ChildIsIndianNational, ChildIsOutOfSchoolChild, MainstreamedDate) VALUES (?)';
 
   const values = [
+    StudentId,
     req.body.MotherTongue,
     req.body.SocialCategory,
     req.body.MinorityGroup,
@@ -72,12 +104,12 @@ app.post('/studentregistration/:id', (req, res) => {
     req.body.MainstreamedDate
   ];
 
-  db.query(q, [StudentId,...values], (err, data) => {
+  db.query(q, [values], (err, data) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: "Error while adding student information" });
     }
-    return res.json({ message: "Student information added successfully!" });
+    return res.json({ message: "Student Registration information added successfully!" });
   });
 });
 

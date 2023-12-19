@@ -10,9 +10,11 @@ import { toast, Toaster } from "react-hot-toast";
 import { IoCall } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import { getAuth } from "firebase/auth";
 
 const Login = () => {
   const { phoneNumber, setAuthData } = useAuth();
+  const [phone, setphone] = useState("");
   const history = useHistory();
   const [otp, setOtp] = useState("");
   const [ph, setPh] = useState("");
@@ -20,20 +22,48 @@ const Login = () => {
   const [showOTP, setShowOTP] = useState(false);
   const [user, setUser] = useState(null);
 
-  function onCaptchVerify() {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: (response) => {
-            onSignup();
+
+  
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8800/authprogress', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-          "expired-callback": () => {},
+          body: JSON.stringify({ "phoneNumber":phone}),
+        });
+  
+        const data = await response.json();
+  
+        // Assuming the backend responds with a student ID
+        const studentId = data.studentId;
+  
+        // Save the student ID in local storage
+        localStorage.setItem('studentId', studentId);
+  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+  
+   
+ 
+
+  function onCaptchVerify() {
+    const auth = getAuth();
+    auth.languageCode = "en";
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {
+        size: "invisible",
+        callback: (response) => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          onSignup();
         },
-        auth
-      );
-    }
+      },
+      auth
+    );
   }
 
   function onSignup() {
@@ -41,15 +71,16 @@ const Login = () => {
     onCaptchVerify();
 
     const appVerifier = window.recaptchaVerifier;
-    const formatPh = '+' + ph;
+    const formatPh = "+" + ph;
 
     signInWithPhoneNumber(auth, formatPh, appVerifier)
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         setLoading(false);
         setShowOTP(true);
-        setAuthData(formatPh); // Store phone number in the context
-        toast.success('OTP sent successfully!');
+        setphone(formatPh);
+        
+        toast.success("OTP sent successfully!");
       })
       .catch((error) => {
         console.log(error);
@@ -62,13 +93,15 @@ const Login = () => {
     window.confirmationResult
       .confirm(otp)
       .then(async (res) => {
-        console.log(res);
         setUser(res.user);
+        setAuthData(phone);
         setLoading(false);
+        await fetchData();
         history.push("/admission");
       })
       .catch((err) => {
         console.log(err);
+        toast.error("Incorrect OTP!");
         setLoading(false);
       });
   }
@@ -80,7 +113,7 @@ const Login = () => {
         <div id="recaptcha-container"></div>
         {user ? (
           <h2 className="text-center text-black font-medium display-4">
-            👍Login Success
+            
           </h2>
         ) : (
           <div className="w-80 d-flex flex-column gap-4 rounded-lg p-4">
@@ -149,6 +182,7 @@ const Login = () => {
                   />
                   <button
                     onClick={onSignup}
+                    id="signin"
                     className="btn btn-primary w-60 d-flex gap-1 align-items-center justify-content-center py-2.5 text-white rounded"
                   >
                     {loading && (

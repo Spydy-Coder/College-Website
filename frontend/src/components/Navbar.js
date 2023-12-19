@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../AuthContext";
 import { useHistory } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 function Navbar(props) {
   const { phoneNumber, logout } = useAuth();
   const history = useHistory();
@@ -33,14 +34,14 @@ function Navbar(props) {
           >
             <ul className="navbar-nav me-auto mb-2 mb-lg-0 fs-5">
               <li className="nav-item ms-4">
-                <a className="nav-link active" aria-current="page" href="/">
+                <Link to="/" className="nav-link active" aria-current="page">
                   Home
-                </a>
+                </Link>
               </li>
               <li className="nav-item ms-4">
-                <a className="nav-link" href="/login">
+                <Link to="/login" className="nav-link">
                   Admission
-                </a>
+                </Link>
               </li>
               <li className="nav-item dropdown ms-4">
                 <a

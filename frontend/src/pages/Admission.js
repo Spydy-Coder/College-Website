@@ -6,6 +6,7 @@ import ApplicationFlow from "../components/ApplicationFlow";
 import { useAuth } from "../AuthContext";
 import { useHistory } from "react-router-dom";
 import { AuthProvider } from "../AuthContext";
+import { useEffect } from "react";
 
 const Admission = () => {
   const { phoneNumber } = useAuth();
