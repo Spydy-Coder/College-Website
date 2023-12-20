@@ -1,12 +1,12 @@
-import express from 'express'
-import cors from 'cors'
-import mysql from 'mysql2'
-import dotenv from 'dotenv';
+import express from "express";
+import cors from "cors";
+import mysql from "mysql2";
+import dotenv from "dotenv";
 
 dotenv.config();
-const app = express()
-app.use(express.json())
-app.use(cors())
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -15,34 +15,50 @@ const db = mysql.createConnection({
   database: "school",
 });
 
-
 app.get("/", (req, res) => {
-  res.json("Root of the Project_school")
-})
-
+  res.json("Root of the Project_school");
+});
 
 app.post("/authprogress", (req, res) => {
   try {
-    // Extract phoneNumber from the request body
-    
     const { phoneNumber } = req.body;
 
-    // Validate if phoneNumber is present
     if (!phoneNumber) {
       return res.status(400).json({ error: "phoneNumber is required" });
     }
 
-    // Your database query
-    const q = 'INSERT INTO authprogress (MobileNumber) VALUES (?)';
-    const values = [phoneNumber];
+    const checkQuery = "SELECT * FROM authprogress WHERE MobileNumber = ?";
 
-    db.query(q, [values], (err, data) => {
-      if (err) {
-        console.error(err);
+    db.query(checkQuery, [phoneNumber], (checkErr, checkResult) => {
+      if (checkErr) {
+        console.error(checkErr);
         return res.status(500).json({ error: "Internal Server Error" });
       }
 
-      return res.json({ message: "New student enrolled!", studentId: data.insertId });
+      if (checkResult.length > 0) {
+        // If phoneNumber exists, return the existing studentId
+        return res.json({
+          message: "Student already enrolled!",
+          studentId: checkResult[0].StudentId,
+        });
+      } else {
+        // If phoneNumber doesn't exist, insert a new record
+        const insertQuery =
+          "INSERT INTO authprogress (MobileNumber) VALUES (?)";
+
+        db.query(insertQuery, [phoneNumber], (insertErr, insertResult) => {
+          if (insertErr) {
+            console.error(insertErr);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+
+          // Return the newly inserted studentId
+          return res.json({
+            message: "New student enrolled!",
+            studentId: insertResult.insertId,
+          });
+        });
+      }
     });
   } catch (error) {
     console.error(error);
@@ -50,12 +66,10 @@ app.post("/authprogress", (req, res) => {
   }
 });
 
-
-
-app.post('/studentidentity/:id', (req, res) => {
-  const StudentId= req.params.id;
+app.post("/studentidentity/:id", (req, res) => {
+  const StudentId = req.params.id;
   const q =
-    'INSERT INTO studentidentity (StudentId, NameAsPerTC, NameAsPerAadhar, AadharNo, DOBAsPerTC, DOBAsPerAadhar, Gender, MotherName, FatherName, GuardianName, AadharNoMother, AadharNoFather, StudentNameAsPerAadhar, PresentAddress, Pincode, MobileNumber, AlternateMobileNumber, EmailId) VALUES (?)'
+    "INSERT INTO studentidentity (StudentId, NameAsPerTC, NameAsPerAadhar, AadharNo, DOBAsPerTC, DOBAsPerAadhar, Gender, MotherName, FatherName, GuardianName, AadharNoMother, AadharNoFather, StudentNameAsPerAadhar, PresentAddress, Pincode, MobileNumber, AlternateMobileNumber, EmailId) VALUES (?)";
   const values = [
     StudentId,
     req.body.NameAsPerTC,
@@ -74,20 +88,19 @@ app.post('/studentidentity/:id', (req, res) => {
     req.body.Pincode,
     req.body.MobileNumber,
     req.body.AlternateMobileNumber,
-    req.body.EmailId
+    req.body.EmailId,
   ];
 
   db.query(q, [values], (err, data) => {
-        if(err) return res.json(err)
-        return  res.json({ message: "New student Identity Information added !"});
+    if (err) return res.json(err);
+    return res.json({ message: "New student Identity Information added !" });
   });
 });
 
-
-app.post('/studentregistration/:id', (req, res) => {
-  const StudentId= req.params.id;
+app.post("/studentregistration/:id", (req, res) => {
+  const StudentId = req.params.id;
   const q =
-    'INSERT INTO studentregistration (StudentId, MotherTongue, SocialCategory, MinorityGroup, BPLBeneficiary, AAYBeneficiary, EWSDisadvantagedGroup, IsCWSN, CWSNImpairmentType, ChildIsIndianNational, ChildIsOutOfSchoolChild, MainstreamedDate) VALUES (?)';
+    "INSERT INTO studentregistration (StudentId, MotherTongue, SocialCategory, MinorityGroup, BPLBeneficiary, AAYBeneficiary, EWSDisadvantagedGroup, IsCWSN, CWSNImpairmentType, ChildIsIndianNational, ChildIsOutOfSchoolChild, MainstreamedDate) VALUES (?)";
 
   const values = [
     StudentId,
@@ -101,20 +114,42 @@ app.post('/studentregistration/:id', (req, res) => {
     req.body.CWSNImpairmentType,
     req.body.ChildIsIndianNational,
     req.body.ChildIsOutOfSchoolChild,
-    req.body.MainstreamedDate
+    req.body.MainstreamedDate,
   ];
 
   db.query(q, [values], (err, data) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: "Error while adding student information" });
+      return res
+        .status(500)
+        .json({ error: "Error while adding student information" });
     }
-    return res.json({ message: "Student Registration information added successfully!" });
+    return res.json({
+      message: "Student Registration information added successfully!",
+    });
   });
 });
 
+app.get("/authprogress/status/:studentId", (req, res) => {
+  const studentId = req.params.studentId;
 
+  const query = "SELECT * FROM authprogress WHERE studentId = ?";
+  db.query(query, [studentId], (err, result) => {
+    if (err) {
+      console.error("Error executing query:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      // Assuming result is an array with a single object
+      if (result.length === 1) {
+        const { StudentId, MobileNumber, ...dataWithoutStudentId } = result[0];
+        res.json(dataWithoutStudentId);
+      } else {
+        res.status(404).json({ error: "Student not found" });
+      }
+    }
+  });
+});
 
-app.listen(8800,()=>{
-    console.log("connected to server")
-})
+app.listen(8800, () => {
+  console.log("connected to server");
+});

@@ -11,6 +11,7 @@ import { IoCall } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { getAuth } from "firebase/auth";
+import { useEffect } from "react";
 
 const Login = () => {
   const { phoneNumber, setAuthData } = useAuth();
@@ -22,6 +23,12 @@ const Login = () => {
   const [showOTP, setShowOTP] = useState(false);
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const storedValue = localStorage.getItem("studentId");
+    if (storedValue) {
+      history.push('/admission');
+    }
+  });
 
   
     const fetchData = async () => {

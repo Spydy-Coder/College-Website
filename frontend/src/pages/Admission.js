@@ -7,6 +7,7 @@ import { useAuth } from "../AuthContext";
 import { useHistory } from "react-router-dom";
 import { AuthProvider } from "../AuthContext";
 import { useEffect } from "react";
+import Footer from "../components/Footer";
 
 const Admission = () => {
   const { phoneNumber } = useAuth();
@@ -43,6 +44,7 @@ const Admission = () => {
       ) : (
         redirectToHome()
       )}
+      <Footer/>
     </>
   );
 };
