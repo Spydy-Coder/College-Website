@@ -81,13 +81,16 @@ function Navbar(props) {
             <div className="d-flex align-items-center  gap-2 mt-1">
               {phoneNumber ? (
                 <>
-                  <span className="text-muted">{phoneNumber}</span>
+                  <span className="text-muted flex-item">{phoneNumber}</span>
+                  <div>
                   <button
-                    className="btn btn-outline-secondary w-100"
+                    className="btn btn-outline-secondary flex-item float-right w-100"
                     onClick={logout}
                   >
                     Logout
                   </button>
+                  </div>
+                  
                 </>
               ) : (
                 <div className="d-flex gap-2 justify-content-center align-items-center ">

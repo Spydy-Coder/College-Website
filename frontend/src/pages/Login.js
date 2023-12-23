@@ -1,4 +1,4 @@
-import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
+import { BsFillShieldLockFill } from "react-icons/bs";
 import { CgSpinner } from "react-icons/cg";
 import OtpInput from "otp-input-react";
 import { useState } from "react";
@@ -14,7 +14,7 @@ import { getAuth } from "firebase/auth";
 import { useEffect } from "react";
 
 const Login = () => {
-  const { phoneNumber, setAuthData } = useAuth();
+  const { setAuthData } = useAuth();
   const [phone, setphone] = useState("");
   const history = useHistory();
   const [otp, setOtp] = useState("");
@@ -124,7 +124,7 @@ const Login = () => {
           </h2>
         ) : (
           <div className="w-80 d-flex flex-column gap-4 rounded-lg p-4">
-            <h2 className="h3 text-muted">Login using Phone Number</h2>
+            <h2 className="h3 text-muted mx-auto">Login using Phone Number</h2>
 
             {showOTP ? (
               <>
@@ -140,8 +140,8 @@ const Login = () => {
                       Enter your OTP
                     </label>
                   </div>
-                  <div className=" bg-light border border-black rounded d-flex justify-content-center align-items-center">
-                    <div className="form-group">
+                  <div className=" bg-light border border-black rounded ">
+                    <div className="form-group d-flex justify-content-center align-items-center">
                       <OtpInput
                         value={otp}
                         onChange={setOtp}
@@ -149,7 +149,8 @@ const Login = () => {
                         otpType="number"
                         disabled={false}
                         autoFocus
-                        className="opt-container form-control"
+                        className="opt-container form-control ms-3 h5 bg-light mb-0"
+                        style={{ border: "none" }}
                       />
                     </div>
                   </div>
